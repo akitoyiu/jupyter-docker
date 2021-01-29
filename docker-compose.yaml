@@ -1,0 +1,21 @@
+version: '3.1'
+
+services:
+
+  jupyter:
+    image: jupyter
+    #command: pip install --no-input mysql-connector-python
+    restart: always    
+    volumes:
+      - ./notebook:/notebook
+      - ./logs:/usr/local/log
+    ports:
+      - "8080:8080"
+    environment:
+      - JUPYTER_TOKEN=easy
+    container_name: jupyter
+
+networks:
+  default:
+    external:
+      name: dev_network
