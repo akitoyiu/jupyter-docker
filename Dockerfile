@@ -44,7 +44,7 @@ RUN wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-p
 RUN apt-get update; \
     apt-get install -y apt-transport-https; \
     apt-get update; \    
-    apt-get install -y dotnet-sdk-5.0
+    apt-get install -y dotnet-sdk-6.0
 
 # Install C# KERNEL
 RUN dotnet tool install -g --add-source "https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet-tools/nuget/v3/index.json" Microsoft.dotnet-interactive
@@ -118,7 +118,8 @@ RUN apt-get install -y default-jdk
 RUN wget https://github.com/SpencerPark/IJava/releases/download/v1.3.0/ijava-1.3.0.zip -O ijava-1.3.0.zip
 
 COPY requirements.txt /setup
-RUN pip install --no-cache-dir -r /setup/requirements.txt
+RUN python3 -m pip install --upgrade pip
+RUN python3 -m pip install -r /setup/requirements.txt
 
 RUN unzip ijava-1.3.0.zip; \
     python3 install.py --sys-prefix
@@ -128,11 +129,20 @@ RUN rm -rf java; \
 
 # Additional addon
 RUN apt-get install -y php-mysqli
-RUN conda install -y -c conda-forge Cython numpy scipy pandas scikit-learn matplotlib plotly pydot seaborn
-RUN conda install -y -c conda-forge mysql-connector-python Pillow scikit-image 
-RUN conda install -y -c conda-forge Keras tensorflow libsvm 
-RUN conda install -y -c conda-forge opencv
-RUN conda install -y -c conda-forge xgboost pytables Theano nltk
+
+RUN wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/cuda-ubuntu2004.pin
+RUN mv cuda-ubuntu2004.pin /etc/apt/preferences.d/cuda-repository-pin-600
+RUN wget https://developer.download.nvidia.com/compute/cuda/11.2.2/local_installers/cuda-repo-ubuntu2004-11-2-local_11.2.2-460.32.03-1_amd64.deb
+RUN dpkg -i cuda-repo-ubuntu2004-11-2-local_11.2.2-460.32.03-1_amd64.deb
+RUN apt-key add /var/cuda-repo-ubuntu2004-11-2-local/7fa2af80.pub
+RUN apt-get update
+RUN apt-get -y install cuda-toolkit-11.2
+
+RUN wget https://www.shinix.com/MLData/libcudnn8_8.1.1.33-1+cuda11.2_amd64.deb
+RUN dpkg -i libcudnn8_8.1.1.33-1+cuda11.2_amd64.deb
+
+#RUN conda install -c conda-forge cudatoolkit=11.2 cudnn=8.1.0
+#RUN export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$CONDA_PREFIX/lib/
 
 # Clean up
 RUN rm -rf /var/lib/apt/lists/*
