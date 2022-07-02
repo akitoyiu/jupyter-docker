@@ -44,7 +44,7 @@ RUN wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-p
 RUN apt-get update; \
     apt-get install -y apt-transport-https; \
     apt-get update; \    
-    apt-get install -y dotnet-sdk-5.0
+    apt-get install -y dotnet-sdk-6.0
 
 # Install C# KERNEL
 RUN dotnet tool install -g --add-source "https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet-tools/nuget/v3/index.json" Microsoft.dotnet-interactive
