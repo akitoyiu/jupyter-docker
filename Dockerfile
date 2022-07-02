@@ -138,7 +138,7 @@ RUN apt-key add /var/cuda-repo-ubuntu2004-11-2-local/7fa2af80.pub
 RUN apt-get update
 RUN apt-get -y install cuda-toolkit-11.2
 
-RUN wget https://www.shinix.com/MLData/libcudnn8_8.1.1.33-1+cuda11.2_amd64.deb
+### get this from somewhere:   libcudnn8_8.1.1.33-1+cuda11.2_amd64.deb
 RUN dpkg -i libcudnn8_8.1.1.33-1+cuda11.2_amd64.deb
 
 #RUN conda install -c conda-forge cudatoolkit=11.2 cudnn=8.1.0
